@@ -3,7 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import logo from '../../public/logo.png';
-import profilePic from '../../public/user.png'; // Replace with the actual path to the profile picture
+import profilePic from '../../public/user.png'; 
 
 const Header = () => {
   return (

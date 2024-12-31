@@ -1,8 +1,8 @@
 "use client";
 import Header from "@/components/Header";
-// import LineGraphComponent from "@/components/LineGraph";
+
 import MainContainer from "@/components/MainContainer";
-// import PieChartComponent from "@/components/PieChart";
+
 import SideBar from "@/components/SideBar";
 import { RootState } from "@/store";
 import React from "react";

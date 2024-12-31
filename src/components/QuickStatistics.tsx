@@ -1,6 +1,6 @@
 import { RootState } from "@/store";
 import React from "react";
-import { FaTrophy, FaClipboardCheck, FaCheckSquare } from "react-icons/fa"; // Import icons
+import { FaTrophy, FaClipboardCheck, FaCheckSquare } from "react-icons/fa"; 
 import { useSelector } from "react-redux";
 
 const QuickStatistics = () => {

@@ -11,7 +11,7 @@ import {
 import Image from "next/image";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
-import logo from "../../public/target-icon.png"; // Update as needed
+import logo from "../../public/target-icon.png"; 
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 

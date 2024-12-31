@@ -1,9 +1,9 @@
 import React from 'react';
 import Image from 'next/image';
-import htmlLogo from '../../public/html_logo.png'; // Replace with the actual path to the HTML logo image
+import htmlLogo from '../../public/html_logo.png'; 
 import { useDispatch } from 'react-redux';
 import { showUpdateScores } from '@/store/modalSlice';
-// import { useDispatch, useSelector } from 'react-redux';
+
 
 const Card = () => {
   const dispatch = useDispatch();
