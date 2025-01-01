@@ -26,6 +26,5 @@ const scoresSlice = createSlice({
     },
   },
 });
-
 export const { updateScores } = scoresSlice.actions;
 export default scoresSlice.reducer;

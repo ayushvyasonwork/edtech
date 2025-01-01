@@ -63,7 +63,7 @@
           <span>Keep practicing to improve further!</span>
         </p>
         <div className="flex justify-center w-full h-full">
-          <div className="flex items-center justify-center w-2/3 h-2/3 relative">
+          <div className="flex items-center justify-center w-2/3 h-3/4  relative">
             <Doughnut data={data} options={options} />
             <div className="absolute bg-white rounded-full h-12 w-12 flex items-center justify-center">
               <Image src={logo} alt="Target Icon" />

@@ -8,7 +8,7 @@ import QuestionAnalysis from './QuestionAnalysis';
 
 const MainContainer = () => {
   return (
-    <div className="flex flex-col w-full h-[200vh] px-6 py-4">
+    <div className="flex flex-col w-full h-[200vh] px-6 py-4 gap-4">
       <h1 className="my-0 px-6">Skill test</h1>
       <div className="flex flex-col md:flex-row justify-between h-full gap-4 ">
         {/* Left Side (Cards and Statistics) */}
@@ -19,7 +19,7 @@ const MainContainer = () => {
         </div>
 
         {/* Right Side (Syllabus Analysis and Question Analysis) */}
-        <div className="w-full md:w-1/3 h-auto flex flex-col items-center gap-4 md:block  px-6">
+        <div className="w-full md:w-1/3 h-auto flex flex-col items-center gap-4 md:block  px-6 sm:space-y-4">
           <SyllabusAnalysis />
           <QuestionAnalysis />
         </div>

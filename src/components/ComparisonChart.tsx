@@ -13,7 +13,6 @@ import {
   ChartOptions,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
-import Image from "next/image";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 
@@ -137,31 +136,38 @@ const ComparisonChart: React.FC = () => {
 
   // Calculate the exact position of the vertical line after chart renders
   useEffect(() => {
-    if (chartRef.current) {
-      const chart = chartRef.current; // Access the Chart.js instance directly
-      const datasetMeta = chart.getDatasetMeta(0); // Meta information for the first dataset
-      const xScale = datasetMeta.xScale;
-      const position = xScale.getPixelForValue(percentile); // Get the pixel position for the percentile
-      setLinePosition(position); // Update the line position
-    }
-  }, [percentile, updatedData]);
+    const resizeHandler = () => {
+      if (chartRef.current) {
+        const chartInstance = chartRef.current.chartInstance || chartRef.current;
+        const xScale = chartInstance.scales["x"]; // Access the x-axis scale
+        const position = xScale.getPixelForValue(percentile); // Get the pixel position for the percentile
+        setLinePosition(position); // Update the vertical line position
+      }
+    };
+
+    // Initial calculation
+    resizeHandler();
+
+    // Add a listener to recalculate on window resize
+    window.addEventListener("resize", resizeHandler);
+    return () => window.removeEventListener("resize", resizeHandler); // Cleanup
+  }, [percentile]);
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg px-6 py-2 flex flex-col w-full">
       <h2 className="text-lg font-bold text-gray-800 mb-2">Comparison Graph</h2>
       <div className="flex flex-col sm:flex-row justify-between gap-4 mb-4">
-  <p className="text-sm text-gray-600">
-    <strong className="text-gray-900">You scored {percentile}% percentile</strong>,
-    which is <strong>{isHigher ? "higher" : "lower"}</strong> than the average percentile
-    (<strong>{averagePercentile.toFixed(2)}%</strong>) of all engineers who took this assessment.
-  </p>
-  <div className="bg-gray-100 rounded-full p-3 flex items-center justify-center max-h-12">
-    {/* <Image src={graph} alt="graph icon" width={40} height={40} /> */}
-    <VscGraphLine className="text-red-500 text-2xl" />
-  </div>
-</div>
+        <p className="text-sm text-gray-600">
+          <strong className="text-gray-900">You scored {percentile}% percentile</strong>, which is{" "}
+          <strong>{isHigher ? "higher" : "lower"}</strong> than the average percentile (
+          <strong>{averagePercentile.toFixed(2)}%</strong>) of all engineers who took this assessment.
+        </p>
+        <div className="bg-gray-100 rounded-full p-3 flex items-center justify-center max-h-12">
+          <VscGraphLine className="text-red-500 text-2xl" />
+        </div>
+      </div>
       {/* Container for the chart */}
-      <div className="relative w-full" style={{ height: "400px" }}> {/* Ensure the container has a fixed height or dynamic height */}
+      <div className="relative w-full" style={{ height: "400px" }}>
         <Line ref={chartRef} data={data} options={options} />
         {/* Vertical Line */}
         <div
@@ -172,8 +178,8 @@ const ComparisonChart: React.FC = () => {
           className="absolute"
           style={{
             left: `${linePosition}px`,
-            top: "50%", // Position the text at the vertical center
-            transform: "translate(-50%, -50%)", // Center the text horizontally and vertically
+            top: "50%",
+            transform: "translate(-50%, -50%)",
           }}
         >
           <span className="text-sm text-gray-500 italic">your percentile</span>
