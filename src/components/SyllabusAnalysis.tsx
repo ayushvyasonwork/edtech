@@ -48,7 +48,7 @@ const SyllabusAnalysis: React.FC = () => {
   ];
 
   return (
-    <div className="border border-gray-200 rounded-lg p-6 bg-white w-full max-w-lg  flex flex-col gap-2">
+    <div className="border border-gray-200 rounded-lg p-6 bg-white w-full  flex flex-col gap-2">
       <h2 className="text-gray-800 font-bold mb-4">Syllabus Wise Analysis</h2>
       {data.map((item, index) => (
         <ProgressBar

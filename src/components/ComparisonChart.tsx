@@ -1,6 +1,7 @@
 "use client";
 import graph from "../../public/statistics.png";
 import React, { useRef, useEffect, useState } from "react";
+import { VscGraphLine } from "react-icons/vsc";
 import {
   Chart as ChartJS,
   LineElement,
@@ -40,7 +41,7 @@ const ComparisonChart: React.FC = () => {
     { x: 60, y: 11 },
     { x: 70, y: 4 },
     { x: 83, y: 2 },
-    { x: 86, y: 6 },
+    { x: 90, y: 3 },
     { x: 100, y: 1 },
   ];
 
@@ -69,9 +70,7 @@ const ComparisonChart: React.FC = () => {
       {
         data: updatedData,
         borderColor: "#6c63ff",
-        pointBackgroundColor: updatedData.map((point) =>
-          point.x === percentile ? "#ff0000" : "#ffffff"
-        ),
+        pointBackgroundColor: "#ffffff",
         pointBorderWidth: updatedData.map((point) => (point.x === percentile ? 2 : 1)),
         pointHoverRadius: updatedData.map((point) => (point.x === percentile ? 6 : 5)),
         borderWidth: 1,
@@ -83,6 +82,7 @@ const ComparisonChart: React.FC = () => {
 
   const options: ChartOptions<"line"> = {
     responsive: true,
+    maintainAspectRatio: false, // Important to allow custom height on responsive charts
     plugins: {
       legend: {
         display: false,
@@ -147,17 +147,21 @@ const ComparisonChart: React.FC = () => {
   }, [percentile, updatedData]);
 
   return (
-    <div className="mx-auto bg-white border border-gray-200 rounded-lg p-6">
+    <div className="bg-white border border-gray-200 rounded-lg px-6 py-2 flex flex-col w-full">
       <h2 className="text-lg font-bold text-gray-800 mb-2">Comparison Graph</h2>
-      <div className="flex justify-between gap-4">
-        <p className="text-sm text-gray-600 mb-4">
-          <strong className="text-gray-900">You scored {percentile}% percentile</strong>, 
-          which is <strong>{isHigher ? "higher" : "lower"}</strong> than the average percentile 
-          (<strong>{averagePercentile.toFixed(2)}%</strong>) of all engineers who took this assessment.
-        </p>
-        <Image src={graph} alt="graph icon" width={40} height={40} />
-      </div>
-      <div className="relative">
+      <div className="flex flex-col sm:flex-row justify-between gap-4 mb-4">
+  <p className="text-sm text-gray-600">
+    <strong className="text-gray-900">You scored {percentile}% percentile</strong>,
+    which is <strong>{isHigher ? "higher" : "lower"}</strong> than the average percentile
+    (<strong>{averagePercentile.toFixed(2)}%</strong>) of all engineers who took this assessment.
+  </p>
+  <div className="bg-gray-100 rounded-full p-3 flex items-center justify-center max-h-12">
+    {/* <Image src={graph} alt="graph icon" width={40} height={40} /> */}
+    <VscGraphLine className="text-red-500 text-2xl" />
+  </div>
+</div>
+      {/* Container for the chart */}
+      <div className="relative w-full" style={{ height: "400px" }}> {/* Ensure the container has a fixed height or dynamic height */}
         <Line ref={chartRef} data={data} options={options} />
         {/* Vertical Line */}
         <div
@@ -168,8 +172,8 @@ const ComparisonChart: React.FC = () => {
           className="absolute"
           style={{
             left: `${linePosition}px`,
-            top: "calc(100% - 20px)",
-            transform: "translateX(-50%)",
+            top: "50%", // Position the text at the vertical center
+            transform: "translate(-50%, -50%)", // Center the text horizontally and vertically
           }}
         >
           <span className="text-sm text-gray-500 italic">your percentile</span>

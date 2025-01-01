@@ -6,7 +6,7 @@ import { HiOutlineDocument } from 'react-icons/hi'; // Icon for Internship
 
 const SideBar = () => {
   return (
-    <div className="w-1/6 h-[130vh] bg-white border-x border-gray-200 flex flex-col items-start py-8 space-y-4 font-bold">
+    <div className="w-1/6 h-[200vh] bg-white border-x border-gray-200 flex flex-col items-start py-8 space-y-4 font-bold">
       {/* Menu Items */}
       
         {/* Dashboard */}

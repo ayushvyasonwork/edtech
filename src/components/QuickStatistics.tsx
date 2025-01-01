@@ -12,10 +12,10 @@ const QuickStatistics = () => {
   return (
     <div className="flex flex-col items-center justify-around border border-gray-200 rounded-lg p-6 bg-white w-full">
       {/* Quick Statistics Title */}
-      <div className="font-bold text-gray-800 w-full">Quick Statistics</div>
-
+      <div className="font-bold text-gray-800 w-full text-center mb-4">Quick Statistics</div>
+      
       {/* Statistics Items */}
-      <div className="flex items-center space-x-6 w-full justify-around">
+      <div className="flex flex-col sm:flex-row items-center space-y-6 sm:space-y-0 sm:space-x-6 w-full justify-around">
         {/* Rank */}
         <div className="flex items-center gap-3">
           <div className="bg-gray-100 rounded-full p-3 flex items-center justify-center">
@@ -28,7 +28,7 @@ const QuickStatistics = () => {
         </div>
 
         {/* Divider */}
-        <div className="border-l border-gray-300 h-full mx-4"></div>
+        <div className="border-l border-gray-300 h-full mx-4 sm:mx-2"></div>
 
         {/* Percentile */}
         <div className="flex items-center gap-3">
@@ -42,7 +42,7 @@ const QuickStatistics = () => {
         </div>
 
         {/* Divider */}
-        <div className="border-l border-gray-300 h-full mx-4"></div>
+        <div className="border-l border-gray-300 h-full mx-4 sm:mx-2"></div>
 
         {/* Correct Answers */}
         <div className="flex items-center gap-3">
