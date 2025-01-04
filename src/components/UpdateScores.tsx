@@ -20,7 +20,7 @@ const UpdateScores = () => {
   const [scoreError, setScoreError] = useState<string | null>(null);
 
   const dispatch = useDispatch();
-
+  
   const handleSave = () => {
     let isValid = true;
 
@@ -51,10 +51,13 @@ const UpdateScores = () => {
       handleHide();
     }
   };
-
   const handleHide = () => {
     dispatch(hideUpdateScores());
   };
+  const handleRank = (value: number) => {
+    setRank(value);
+    localStorage.setItem("rank", value.toString());
+  }
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -73,7 +76,7 @@ const UpdateScores = () => {
             <input
               type="number"
               value={rank}
-              onChange={(e) => setRank(Number(e.target.value))}
+              onChange={(e) => handleRank(Number(e.target.value))}
               className="px-3 py-2 border rounded-lg focus:outline-none border-blue-400 w-full sm:w-2/3"
             />
           </div>
@@ -115,6 +118,7 @@ const UpdateScores = () => {
           </div>
         </form>
 
+    
         {/* Action Buttons */}
         <div className="mt-6 flex flex-col sm:flex-row justify-between gap-2">
           <button

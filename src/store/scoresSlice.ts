@@ -7,7 +7,7 @@ interface ScoresState {
 }
 
 const initialState: ScoresState = {
-  rank: 1,
+  rank: localStorage.getItem("rank") ? parseInt(localStorage.getItem("rank") as string) : 0,
   percentile: 30,
   currentScore: 10,
 };

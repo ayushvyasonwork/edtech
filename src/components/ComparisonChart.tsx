@@ -1,5 +1,5 @@
 "use client";
-import graph from "../../public/statistics.png";
+// import graph from "../../public/statistics.png";
 import React, { useRef, useEffect, useState } from "react";
 import { VscGraphLine } from "react-icons/vsc";
 import {
