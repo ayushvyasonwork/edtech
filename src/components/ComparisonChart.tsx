@@ -1,5 +1,4 @@
 "use client";
-// import graph from "../../public/statistics.png";
 import React, { useRef, useEffect, useState } from "react";
 import { VscGraphLine } from "react-icons/vsc";
 import {
@@ -11,22 +10,21 @@ import {
   Tooltip,
   Legend,
   ChartOptions,
+  TooltipItem,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
+import type { Chart } from "chart.js";
 
-// Registering the necessary components of Chart.js
+// Register chart components
 ChartJS.register(LineElement, PointElement, LinearScale, CategoryScale, Tooltip, Legend);
 
 const ComparisonChart: React.FC = () => {
-  const chartRef = useRef<any>(null); // Reference to the chart instance
-  const [linePosition, setLinePosition] = useState(0); // State to store the vertical line position
-
-  // Accessing the percentile from Redux store
+  const chartRef = useRef<Chart<"line"> | null>(null);
+  const [linePosition, setLinePosition] = useState(0);
   const { percentile } = useSelector((state: RootState) => state.scores);
 
-  // Base dataset
   const baseData = [
     { x: 0, y: 1 },
     { x: 10, y: 2 },
@@ -44,21 +42,16 @@ const ComparisonChart: React.FC = () => {
     { x: 100, y: 1 },
   ];
 
-  // Function to compute the number of students for the given percentile
-  const computeStudents = (percentile: number): number => {
-    return Math.max(1, Math.floor((100 - percentile) / 10)); // Adjust as needed
-  };
+  const computeStudents = (p: number): number => Math.max(1, Math.floor((100 - p) / 10));
 
-  // Function to calculate the average percentile
   const calculateAveragePercentile = (): number => {
-    const totalPercentile = baseData.reduce((sum, point) => sum + point.x, 0);
-    return totalPercentile / baseData.length;
+    const total = baseData.reduce((sum, point) => sum + point.x, 0);
+    return total / baseData.length;
   };
 
   const averagePercentile = calculateAveragePercentile();
   const isHigher = percentile > averagePercentile;
 
-  // Add the user's percentile dynamically
   const updatedData = [...baseData, { x: percentile, y: computeStudents(percentile) }].sort(
     (a, b) => a.x - b.x
   );
@@ -70,8 +63,8 @@ const ComparisonChart: React.FC = () => {
         data: updatedData,
         borderColor: "#6c63ff",
         pointBackgroundColor: "#ffffff",
-        pointBorderWidth: updatedData.map((point) => (point.x === percentile ? 2 : 1)),
-        pointHoverRadius: updatedData.map((point) => (point.x === percentile ? 6 : 5)),
+        pointBorderWidth: updatedData.map((pt) => (pt.x === percentile ? 2 : 1)),
+        pointHoverRadius: updatedData.map((pt) => (pt.x === percentile ? 6 : 5)),
         borderWidth: 1,
         tension: 0.2,
         fill: false,
@@ -81,16 +74,14 @@ const ComparisonChart: React.FC = () => {
 
   const options: ChartOptions<"line"> = {
     responsive: true,
-    maintainAspectRatio: false, // Important to allow custom height on responsive charts
+    maintainAspectRatio: false,
     plugins: {
-      legend: {
-        display: false,
-      },
+      legend: { display: false },
       tooltip: {
         callbacks: {
-          label: (context: any) => {
-            const value = context.raw.y;
-            return `Number of Students: ${value}`;
+          label: (context: TooltipItem<"line">) => {
+            const value = context.raw as { x: number; y: number };
+            return `Number of Students: ${value.y}`;
           },
         },
         backgroundColor: "#ffffff",
@@ -114,14 +105,9 @@ const ComparisonChart: React.FC = () => {
           display: true,
           text: "Percentile",
           color: "#555",
-          font: {
-            size: 14,
-            family: "Arial, sans-serif",
-          },
+          font: { size: 14, family: "Arial, sans-serif" },
         },
-        grid: {
-          display: false,
-        },
+        grid: { display: false },
       },
       y: {
         display: false,
@@ -134,23 +120,18 @@ const ComparisonChart: React.FC = () => {
     },
   };
 
-  // Calculate the exact position of the vertical line after chart renders
   useEffect(() => {
     const resizeHandler = () => {
       if (chartRef.current) {
-        const chartInstance = chartRef.current.chartInstance || chartRef.current;
-        const xScale = chartInstance.scales["x"]; // Access the x-axis scale
-        const position = xScale.getPixelForValue(percentile); // Get the pixel position for the percentile
-        setLinePosition(position); // Update the vertical line position
+        const xScale = chartRef.current.scales["x"];
+        const position = xScale.getPixelForValue(percentile);
+        setLinePosition(position);
       }
     };
 
-    // Initial calculation
     resizeHandler();
-
-    // Add a listener to recalculate on window resize
     window.addEventListener("resize", resizeHandler);
-    return () => window.removeEventListener("resize", resizeHandler); // Cleanup
+    return () => window.removeEventListener("resize", resizeHandler);
   }, [percentile]);
 
   return (
@@ -166,10 +147,8 @@ const ComparisonChart: React.FC = () => {
           <VscGraphLine className="text-red-500 text-2xl" />
         </div>
       </div>
-      {/* Container for the chart */}
       <div className="relative w-full" style={{ height: "400px" }}>
         <Line ref={chartRef} data={data} options={options} />
-        {/* Vertical Line */}
         <div
           className="absolute border-l-2 border-gray-300 h-full"
           style={{ left: `${linePosition}px`, top: 0 }}
