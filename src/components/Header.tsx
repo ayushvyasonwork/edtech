@@ -23,7 +23,7 @@ const Header = () => {
           height={32}
           className="rounded-full"
         />
-        <span className="font-bold text-sm sm:text-base">Rahil Siddique</span>
+        <span className="font-bold text-sm sm:text-base">Ayush Vyas</span>
       </div>
     </div>
   );
