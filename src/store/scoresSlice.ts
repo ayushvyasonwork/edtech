@@ -1,13 +1,14 @@
+// store/scoresSlice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface ScoresState {
+export interface ScoresState {
   rank: number;
   percentile: number;
   currentScore: number;
 }
 
 const initialState: ScoresState = {
-  rank: localStorage.getItem("rank") ? parseInt(localStorage.getItem("rank") as string) : 0,
+  rank: 0,            // default fallback
   percentile: 30,
   currentScore: 10,
 };
@@ -26,5 +27,6 @@ const scoresSlice = createSlice({
     },
   },
 });
+
 export const { updateScores } = scoresSlice.actions;
 export default scoresSlice.reducer;

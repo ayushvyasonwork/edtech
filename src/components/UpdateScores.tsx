@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../../public/html_logo.png";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,11 +20,20 @@ const UpdateScores = () => {
   const [scoreError, setScoreError] = useState<string | null>(null);
 
   const dispatch = useDispatch();
-  
+
+  // ✅ Load rank from localStorage safely (browser-only)
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedRank = localStorage.getItem("rank");
+      if (storedRank) {
+        setRank(parseInt(storedRank));
+      }
+    }
+  }, []);
+
   const handleSave = () => {
     let isValid = true;
 
-    // Validate Percentile
     if (percentile < 0 || percentile > 100) {
       setPercentileError("Required | Percentile must be between 0 and 100.");
       isValid = false;
@@ -32,7 +41,6 @@ const UpdateScores = () => {
       setPercentileError(null);
     }
 
-    // Validate Current Score
     if (currentScore < 0 || currentScore > 15) {
       setScoreError("Required | Score must be between 0 and 15.");
       isValid = false;
@@ -41,23 +49,17 @@ const UpdateScores = () => {
     }
 
     if (isValid) {
-      dispatch(
-        updateScores({
-          rank,
-          percentile,
-          currentScore,
-        })
-      );
+      dispatch(updateScores({ rank, percentile, currentScore }));
+      if (typeof window !== "undefined") {
+        localStorage.setItem("rank", rank.toString());
+      }
       handleHide();
     }
   };
+
   const handleHide = () => {
     dispatch(hideUpdateScores());
   };
-  const handleRank = (value: number) => {
-    setRank(value);
-    localStorage.setItem("rank", value.toString());
-  }
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -76,7 +78,7 @@ const UpdateScores = () => {
             <input
               type="number"
               value={rank}
-              onChange={(e) => handleRank(Number(e.target.value))}
+              onChange={(e) => setRank(Number(e.target.value))}
               className="px-3 py-2 border rounded-lg focus:outline-none border-blue-400 w-full sm:w-2/3"
             />
           </div>
@@ -118,7 +120,6 @@ const UpdateScores = () => {
           </div>
         </form>
 
-    
         {/* Action Buttons */}
         <div className="mt-6 flex flex-col sm:flex-row justify-between gap-2">
           <button
